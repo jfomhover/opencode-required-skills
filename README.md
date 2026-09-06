@@ -1,6 +1,8 @@
 # opencode-required-skills
 
-Require an OpenCode skill before an agent can use selected native file tools on matching paths.
+Force OpenCode to load a skill before an agent can access files covered by a project rule.
+
+## Why
 
 This is useful when a project has rules that are easy for an agent to forget: file organization, specialized formats, review procedures, or validation workflows. The plugin turns those rules into a visible project policy:
 
@@ -16,11 +18,11 @@ The plugin does not replace OpenCode's skill loader, inspect skill files, infer 
 
 Install the published npm package with the OpenCode CLI:
 
-```powershell
+```sh
 opencode plugin opencode-required-skills
 ```
 
-`opencode plug opencode-required-skills` is an equivalent alias. The command installs the plugin and updates the appropriate OpenCode configuration. A global `npm install` is not required.
+The command installs the plugin and updates the appropriate OpenCode configuration. A global `npm install` is not required.
 
 For this plugin's policy options, update the generated `opencode.json` entry to the tuple form below:
 
