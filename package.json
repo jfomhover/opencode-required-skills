@@ -1,6 +1,6 @@
 {
   "name": "opencode-required-skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenCode plugin that requires skills before selected native file-tool calls.",
   "type": "module",
   "engines": { "node": ">=20" },
@@ -12,6 +12,7 @@
   "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
   "files": ["dist", "README.md", "LICENSE"],
   "scripts": { "build": "tsc", "typecheck": "tsc --noEmit", "test": "vitest run", "lint": "tsc --noEmit", "prepublishOnly": "npm run build && npm test" },
+  "dependencies": { "minimatch": "^10.0.1" },
   "peerDependencies": { "@opencode-ai/plugin": ">=1.18.0 <1.19.0" },
-  "devDependencies": { "@opencode-ai/plugin": "^1.18.15", "@types/node": "^22.0.0", "minimatch": "^10.0.1", "typescript": "^5.7.0", "vitest": "^2.1.0" }
+  "devDependencies": { "@opencode-ai/plugin": "^1.18.15", "@types/node": "^22.0.0", "typescript": "^5.7.0", "vitest": "^2.1.0" }
 }
