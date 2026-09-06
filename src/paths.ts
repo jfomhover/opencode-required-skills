@@ -14,12 +14,14 @@ export function normalizeRule(value: string): string {
 export function normalizePath(value: unknown, worktree: string): string {
   if (typeof value !== "string" || !value.trim()) throw new PathError("file path must be a non-empty string")
   const input = value.replaceAll("\\", "/")
-  const root = path.resolve(worktree)
-  const absolute = path.isAbsolute(input) ? path.resolve(input) : path.resolve(root, input)
-  const relative = path.relative(root, absolute).replaceAll("\\", "/")
-  if (relative === "" || relative === "." || relative === ".." || relative.startsWith("../") || path.isAbsolute(relative)) throw new PathError("path is outside the worktree")
+  const windows = /^[A-Za-z]:\//.test(input) || input.startsWith("//") || /^[A-Za-z]:[\\/]/.test(worktree)
+  const platformPath = windows ? path.win32 : path.posix
+  const root = platformPath.resolve(worktree.replaceAll("\\", "/"))
+  const absolute = platformPath.isAbsolute(input) ? platformPath.resolve(input) : platformPath.resolve(root, input)
+  const relative = platformPath.relative(root, absolute).replaceAll("\\", "/")
+  if (relative === "" || relative === "." || relative === ".." || relative.startsWith("../") || platformPath.isAbsolute(relative)) throw new PathError("path is outside the worktree")
   if (input.split("/").some((part) => part === "..")) {
-    const lexical = path.posix.normalize(input)
+    const lexical = platformPath.normalize(input).replaceAll("\\", "/")
     if (lexical === ".." || lexical.startsWith("../")) throw new PathError("path escapes the worktree")
   }
   return relative.startsWith("./") ? relative.slice(2) : relative
