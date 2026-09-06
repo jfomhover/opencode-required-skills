@@ -14,9 +14,15 @@ The plugin does not replace OpenCode's skill loader, inspect skill files, infer 
 
 ## Install
 
-Publish or install the package through OpenCode's npm plugin configuration. OpenCode installs configured npm plugins automatically; a global `npm install` is not required.
+Install the published npm package with the OpenCode CLI:
 
-Add this to `opencode.json`:
+```powershell
+opencode plugin opencode-required-skills
+```
+
+`opencode plug opencode-required-skills` is an equivalent alias. The command installs the plugin and updates the appropriate OpenCode configuration. A global `npm install` is not required.
+
+For this plugin's policy options, update the generated `opencode.json` entry to the tuple form below:
 
 ```json
 {
