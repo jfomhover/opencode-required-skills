@@ -1,22 +1,59 @@
 {
   "name": "opencode-required-skills",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "OpenCode plugin that requires skills before selected native file-tool calls.",
   "type": "module",
-  "engines": { "node": ">=20" },
-  "keywords": ["opencode", "opencode-plugin", "skills", "policy"],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "policy"
+  ],
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/jfomhover/opencode-required-skills.git" },
-  "bugs": { "url": "https://github.com/jfomhover/opencode-required-skills/issues" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jfomhover/opencode-required-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jfomhover/opencode-required-skills/issues"
+  },
   "homepage": "https://github.com/jfomhover/opencode-required-skills",
   "main": "./dist/index.js",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
-    "./server": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
-  "files": ["dist", "README.md", "LICENSE"],
-  "scripts": { "build": "tsc", "typecheck": "tsc --noEmit", "test": "vitest run", "lint": "tsc --noEmit", "prepublishOnly": "npm run build && npm test" },
-  "dependencies": { "minimatch": "^10.0.1" },
-  "peerDependencies": { "@opencode-ai/plugin": ">=1.18.0 <1.19.0" },
-  "devDependencies": { "@opencode-ai/plugin": "^1.18.15", "@types/node": "^22.0.0", "typescript": "^5.7.0", "vitest": "^2.1.0" }
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "minimatch": "^10.0.1"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.18.0 <1.19.0"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.18.15",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
 }
