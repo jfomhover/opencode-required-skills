@@ -12,3 +12,12 @@ opencode run -m opencode/big-pickle --print-logs --log-level INFO --auto "Read p
 Expected result: the plugin blocks the `read` call and reports that `smoke-test-skill` must be loaded first. A successful model summary means the local plugin was not loaded and should be investigated before relying on the result.
 
 This fixture intentionally tests only the first blocking step. It does not provide a real skill, so a second successful retry is outside this fixture's scope.
+
+Test the compiled `apply_patch` adapter directly when the active OpenCode model does not expose an `apply_patch` tool:
+
+```powershell
+npm --prefix .. run build
+node apply-patch-smoke.mjs
+```
+
+This uses OpenCode's `patchText` argument shape and verifies protected, unprotected, legacy, and malformed payloads. The current `big-pickle` CLI session does not expose `apply_patch`, so the deterministic runtime smoke test is the regression check for this boundary.

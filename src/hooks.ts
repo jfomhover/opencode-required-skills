@@ -3,10 +3,13 @@ import { createPolicy } from "./policy.js"
 import { SessionState } from "./session-state.js"
 
 const tools = new Set(["read", "write", "edit", "apply_patch"])
-function pathsFor(tool: string, args: any): string[] | undefined {
+export function pathsFor(tool: string, args: any): string[] | undefined {
   if (tool === "apply_patch") {
-    if (typeof args?.patch !== "string") return undefined
-    const result: string[] = []; const lines = args.patch.split(/\r?\n/)
+    // OpenCode 1.18.x calls this argument patchText. Keep patch as a
+    // deterministic fallback for older hosts and test fixtures.
+    const patch = Object.prototype.hasOwnProperty.call(args ?? {}, "patchText") ? args.patchText : args?.patch
+    if (typeof patch !== "string") return undefined
+    const result: string[] = []; const lines = patch.split(/\r?\n/)
     let currentMoveSource: string | undefined
     for (const line of lines) {
       const marker = line.match(/^\*\*\* (Add File|Update File|Move to|Delete File): (.+)$/)
@@ -29,6 +32,7 @@ function error(tool: string, match: ReturnType<ReturnType<typeof createPolicy>["
 }
 
 export function createHooks(input: any, policy: Policy) {
+  if (!policy.require.length) return {}
   const matcher = createPolicy(policy); const state = new SessionState(); const worktree = input.worktree ?? input.directory
   return {
     async event({ event }: { event: any }) { const type = event?.type; if (type === "session.compacted" || type === "session.next.compaction.ended") state.compact(event.sessionID) },
