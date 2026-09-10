@@ -1,5 +1,6 @@
 import type { Policy } from "./config.js"
 import { createPolicy } from "./policy.js"
+import { normalizePath, PathError } from "./paths.js"
 import { SessionState } from "./session-state.js"
 
 const tools = new Set(["read", "write", "edit", "apply_patch"])
@@ -39,7 +40,11 @@ export function createHooks(input: any, policy: Policy) {
     async "tool.execute.before"(toolInput: any, output: any) {
       if (!tools.has(toolInput.tool)) return
       const paths = pathsFor(toolInput.tool, output.args); if (!paths) throw new Error(`[required-skills] Blocked ${toolInput.tool}: file paths could not be parsed safely.`)
-      const match = matcher.forPaths(paths, worktree); if (!match.skills.length) return
+      const scopedPaths = toolInput.tool === "read" ? paths.filter((value: string) => {
+        try { normalizePath(value, worktree); return true } catch (error) { if (error instanceof PathError && error.code === "outside") return false; throw error }
+      }) : paths
+      if (!scopedPaths.length) return
+      const match = matcher.forPaths(scopedPaths, worktree); if (!match.skills.length) return
       const known = await state.restore(toolInput.sessionID, input.client); const missing = match.skills.filter((skill) => !known.has(skill)); if (missing.length) throw error(toolInput.tool, match, missing)
     },
     async "tool.execute.after"(toolInput: any, output: any) { if (toolInput.tool !== "skill") return; if (output?.error) return; const name = toolInput.args?.name; if (typeof name === "string" && name) state.complete(toolInput.sessionID, name) },

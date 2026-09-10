@@ -50,3 +50,10 @@ it("is a no-op when no policies are configured", async () => {
   const hooks: any = await plugin(input)
   expect(hooks).toEqual({})
 })
+
+it("ignores external reads but rejects external mutations", async () => {
+  const input = { directory: "/repo", worktree: "/repo", client: { session: { messages: async () => ({ data: [] }) } } }
+  const hooks: any = await plugin(input, { require: [{ skill: "organize", on: { path: "docs/**/*.md" } }] })
+  await expect(hooks["tool.execute.before"]({ tool: "read", sessionID: "s", callID: "c" }, { args: { filePath: "/other-repository/notes.md" } })).resolves.toBeUndefined()
+  await expect(hooks["tool.execute.before"]({ tool: "edit", sessionID: "s", callID: "c" }, { args: { filePath: "/other-repository/notes.md" } })).rejects.toThrow(/outside the worktree/)
+})

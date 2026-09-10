@@ -69,7 +69,7 @@ It will:
 
 - Normalize separators.
 - Resolve paths against the worktree.
-- Reject outside-worktree paths.
+- Ignore outside-worktree reads and reject outside-worktree mutations.
 - Reject lexical traversal.
 - Define case behavior.
 - Handle Windows drive and UNC paths.

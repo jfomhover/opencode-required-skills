@@ -49,7 +49,8 @@ The following rules apply:
 - Convert `\` to `/`.
 - Resolve absolute paths against the OpenCode worktree.
 - Match worktree-relative paths.
-- Reject paths outside the worktree.
+- For `read`, ignore paths outside the worktree because project-relative rules cannot match them.
+- For `write`, `edit`, and `apply_patch`, reject paths outside the worktree.
 - Reject paths that escape with `..`.
 - Use case-sensitive matching on all systems.
 - Do not resolve symlinks in release 1.

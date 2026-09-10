@@ -1,7 +1,12 @@
 import path from "node:path"
 import { minimatch } from "minimatch"
 
-export class PathError extends Error { constructor(message: string) { super(`[required-skills] Invalid path: ${message}`); this.name = "PathError" } }
+export class PathError extends Error {
+  constructor(message: string, readonly code: "invalid" | "outside" = "invalid") {
+    super(`[required-skills] Invalid path: ${message}`)
+    this.name = "PathError"
+  }
+}
 
 export function normalizeRule(value: string): string {
   let rule = value.replaceAll("\\", "/")
@@ -19,10 +24,10 @@ export function normalizePath(value: unknown, worktree: string): string {
   const root = platformPath.resolve(worktree.replaceAll("\\", "/"))
   const absolute = platformPath.isAbsolute(input) ? platformPath.resolve(input) : platformPath.resolve(root, input)
   const relative = platformPath.relative(root, absolute).replaceAll("\\", "/")
-  if (relative === "" || relative === "." || relative === ".." || relative.startsWith("../") || platformPath.isAbsolute(relative)) throw new PathError("path is outside the worktree")
+  if (relative === "" || relative === "." || relative === ".." || relative.startsWith("../") || platformPath.isAbsolute(relative)) throw new PathError("path is outside the worktree", "outside")
   if (input.split("/").some((part) => part === "..")) {
     const lexical = platformPath.normalize(input).replaceAll("\\", "/")
-    if (lexical === ".." || lexical.startsWith("../")) throw new PathError("path escapes the worktree")
+    if (lexical === ".." || lexical.startsWith("../")) throw new PathError("path escapes the worktree", "outside")
   }
   return relative.startsWith("./") ? relative.slice(2) : relative
 }

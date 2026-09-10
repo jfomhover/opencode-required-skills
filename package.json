@@ -1,6 +1,6 @@
 {
   "name": "opencode-required-skills",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "OpenCode plugin that requires skills before selected native file-tool calls.",
   "type": "module",
   "engines": {
